@@ -1,0 +1,8 @@
+to do
+
+work on database with a focus on user log in 
+work on gui for login and test connection with database
+
+next 
+
+classes for the objects in the project 
