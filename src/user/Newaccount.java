@@ -179,7 +179,7 @@ public class Newaccount extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
     }
-/*
+
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel
         try {
@@ -189,6 +189,6 @@ public class Newaccount extends JFrame implements ActionListener {
         }
         new Newaccount();
     }
-    */
+    
 }
 

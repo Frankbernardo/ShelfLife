@@ -20,25 +20,17 @@ import java.sql.DriverManager;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Loginpage extends Application {
+import invdata.InvData;
 
-    private Connection connect() {
-        String url = "jdbc:mysql://localhost:3306/InventoryDB"; 
-        String user = "root"; 
-        String password = "Misa70656"; 
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to the database successfully.");
-        } catch (SQLException e) {
-            System.out.println("Could not connect to the database.");
-            e.printStackTrace();
-        }
-        return conn;
-    }
-    
+public class Loginpage extends Application {
+	  private InvData invData;
+
+
     @Override
     public void start(Stage primaryStage) {
+    	invData = new InvData();
+    	
+    	
         primaryStage.setTitle("Welcome to Shelf Life");
 
         GridPane grid = new GridPane();
