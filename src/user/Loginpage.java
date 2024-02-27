@@ -31,6 +31,7 @@ public class Loginpage extends Application {
     	invData = new InvData();
     	
     	
+    	
         primaryStage.setTitle("Welcome to Shelf Life");
 
         GridPane grid = new GridPane();
@@ -74,7 +75,14 @@ public class Loginpage extends Application {
         grid.add(actiontarget, 1, 6);
 
         btnLogin.setOnAction(e -> {
-            // Login logic goes here
+            String email = txtUser.getText();
+            String password = txtPassword.getText();
+            if (invData.checkUserCredentials(email, password)) {
+                actiontarget.setText("Login successful!");
+                // Proceed to the next screen or perform other actions
+            } else {
+                actiontarget.setText("Invalid email or password.");
+            }
         });
 
         btnCreateAccount.setOnAction(e -> {
@@ -90,4 +98,10 @@ public class Loginpage extends Application {
         primaryStage.show();
     }
     
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
+
+    
+
