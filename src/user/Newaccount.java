@@ -1,133 +1,99 @@
 package user;
-
-import javax.swing.*;
-
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Newaccount extends JFrame implements ActionListener {
+public class Newaccount extends Application {
 
-    private Container container;
-    private JLabel titleLabel;
-    private JLabel firstNameLabel;
-    private JTextField firstNameTextField;
-    private JLabel lastNameLabel;
-    private JTextField lastNameTextField;
-    private JLabel emailLabel;
-    private JTextField emailTextField;
-    private JLabel passwordLabel;
-    private JPasswordField passwordField;
-    private JCheckBox adminCheckBox;
-    private JCheckBox regularCheckBox;
-    private JButton submitButton;
-    private JButton signInButton; // Added Sign In button
+    private final String url = "jdbc:mysql://localhost:3306/InventoryDB";
+    private final String dbUser = "root";
+    private final String dbPassword = "Misa70656";
 
-    private String url = "jdbc:mysql://localhost:3306/InventoryDB"; 
-    private String dbUser = "root"; 
-    private String dbPassword = "Misa70656";
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Create Account");
 
-    public Newaccount() {
-        setTitle("Create Account");
-        setBounds(300, 90, 900, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        container = getContentPane();
-        container.setLayout(null);
+        Text scenetitle = new Text("Create Account");
+        scenetitle.setFont(Font.font("Arial", 30));
+        grid.add(scenetitle, 0, 0, 2, 1);
 
-        titleLabel = new JLabel("Create Account");
-        titleLabel.setFont(new Font("Arial", Font.PLAIN, 30));
-        titleLabel.setSize(300, 30);
-        titleLabel.setLocation(300, 30);
-        container.add(titleLabel);
+        Label userNameLabel = new Label("First Name:");
+        grid.add(userNameLabel, 0, 1);
 
-        firstNameLabel = new JLabel("First Name");
-        firstNameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        firstNameLabel.setSize(100, 20);
-        firstNameLabel.setLocation(100, 100);
-        container.add(firstNameLabel);
+        TextField userTextField = new TextField();
+        grid.add(userTextField, 1, 1);
 
-        firstNameTextField = new JTextField();
-        firstNameTextField.setFont(new Font("Arial", Font.PLAIN, 15));
-        firstNameTextField.setSize(190, 20);
-        firstNameTextField.setLocation(200, 100);
-        container.add(firstNameTextField);
+        Label lastNameLabel = new Label("Last Name:");
+        grid.add(lastNameLabel, 0, 2);
 
-        lastNameLabel = new JLabel("Last Name");
-        lastNameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        lastNameLabel.setSize(100, 20);
-        lastNameLabel.setLocation(400, 100);
-        container.add(lastNameLabel);
+        TextField lastNameTextField = new TextField();
+        grid.add(lastNameTextField, 1, 2);
 
-        lastNameTextField = new JTextField();
-        lastNameTextField.setFont(new Font("Arial", Font.PLAIN, 15));
-        lastNameTextField.setSize(190, 20);
-        lastNameTextField.setLocation(500, 100);
-        container.add(lastNameTextField);
+        Label emailLabel = new Label("Email:");
+        grid.add(emailLabel, 0, 3);
 
-        emailLabel = new JLabel("Email");
-        emailLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        emailLabel.setSize(100, 20);
-        emailLabel.setLocation(100, 150);
-        container.add(emailLabel);
+        TextField emailTextField = new TextField();
+        grid.add(emailTextField, 1, 3);
 
-        emailTextField = new JTextField();
-        emailTextField.setFont(new Font("Arial", Font.PLAIN, 15));
-        emailTextField.setSize(190, 20);
-        emailTextField.setLocation(200, 150);
-        container.add(emailTextField);
+        Label pwLabel = new Label("Password:");
+        grid.add(pwLabel, 0, 4);
 
-        passwordLabel = new JLabel("Password");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        passwordLabel.setSize(100, 20);
-        passwordLabel.setLocation(100, 200);
-        container.add(passwordLabel);
+        PasswordField pwBox = new PasswordField();
+        grid.add(pwBox, 1, 4);
 
-        passwordField = new JPasswordField();
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 15));
-        passwordField.setSize(190, 20);
-        passwordField.setLocation(200, 200);
-        container.add(passwordField);
+        ToggleGroup group = new ToggleGroup();
+        RadioButton rbAdmin = new RadioButton("Admin user");
+        rbAdmin.setToggleGroup(group);
+        rbAdmin.setSelected(true);
 
-        adminCheckBox = new JCheckBox("Admin user");
-        adminCheckBox.setFont(new Font("Arial", Font.PLAIN, 15));
-        adminCheckBox.setSize(150, 20);
-        adminCheckBox.setLocation(200, 250);
-        container.add(adminCheckBox);
+        RadioButton rbRegular = new RadioButton("Regular user");
+        rbRegular.setToggleGroup(group);
 
-        regularCheckBox = new JCheckBox("Regular user");
-        regularCheckBox.setFont(new Font("Arial", Font.PLAIN, 15));
-        regularCheckBox.setSize(150, 20);
-        regularCheckBox.setLocation(200, 275);
-        container.add(regularCheckBox);
+        HBox userTypeBox = new HBox(20);
+        userTypeBox.getChildren().add(rbAdmin);
+        userTypeBox.getChildren().add(rbRegular);
+        grid.add(userTypeBox, 1, 5);
 
-        // Ensure that admin and regular are mutually exclusive
-        ButtonGroup userTypeGroup = new ButtonGroup();
-        userTypeGroup.add(adminCheckBox);
-        userTypeGroup.add(regularCheckBox);
+        Button btn = new Button("Sign up");
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(btn);
+        grid.add(hbBtn, 1, 6);
 
-        submitButton = new JButton("Submit");
-        submitButton.setFont(new Font("Arial", Font.PLAIN, 15));
-        submitButton.setSize(100, 20);
-        submitButton.setLocation(150, 350);
-        submitButton.addActionListener(this);
-        container.add(submitButton);
+        final Text actiontarget = new Text();
+        grid.add(actiontarget, 1, 7);
 
-        signInButton = new JButton("Sign In");
-        signInButton.setFont(new Font("Arial", Font.PLAIN, 15));
-        signInButton.setSize(100, 20);
-        signInButton.setLocation(260, 350);
-        signInButton.addActionListener(this);
-        container.add(signInButton);
+        btn.setOnAction(e -> {
+            String firstName = userTextField.getText();
+            String lastName = lastNameTextField.getText();
+            String email = emailTextField.getText();
+            String password = pwBox.getText();
+            String userType = rbAdmin.isSelected() ? "Admin" : "Regular";
+            insertUser(firstName, lastName, email, password, userType);
+        });
 
-        setVisible(true);
+        Scene scene = new Scene(grid, 800, 475);
+        primaryStage.setScene(scene);
+
+        primaryStage.show();
     }
 
     private Connection connect() {
@@ -140,24 +106,6 @@ public class Newaccount extends JFrame implements ActionListener {
             e.printStackTrace();
         }
         return conn;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == submitButton) {
-            String firstName = firstNameTextField.getText();
-            String lastName = lastNameTextField.getText();
-            String email = emailTextField.getText();
-            String pass = new String(passwordField.getPassword());
-            String userType = adminCheckBox.isSelected() ? "Admin" : "Regular";
-
-            // Insert user data into database
-            insertUser(firstName, lastName, email, pass, userType);
-        } else if (e.getSource() == signInButton) {
-            // Handle Sign In action
-            // You might want to display a login form or dialog here
-            JOptionPane.showMessageDialog(this, "Sign In button clicked");
-        }
     }
 
     private void insertUser(String firstName, String lastName, String email, String password, String userType) {
@@ -173,25 +121,17 @@ public class Newaccount extends JFrame implements ActionListener {
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
-                JOptionPane.showMessageDialog(this, "User registered successfully!");
+                System.out.println("User registered successfully!");
             } else {
-                JOptionPane.showMessageDialog(this, "User registration failed.");
+                System.out.println("User registration failed.");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error during database operation.");
+            System.out.println("Error during database operation.");
             ex.printStackTrace();
         }
     }
 
-
     public static void main(String[] args) {
-        // Set the look and feel to the system look and feel
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        new Newaccount();
+        launch(args);
     }
 }
-
