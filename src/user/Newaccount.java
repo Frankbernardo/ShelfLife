@@ -161,14 +161,14 @@ public class Newaccount extends JFrame implements ActionListener {
     }
 
     private void insertUser(String firstName, String lastName, String email, String password, String userType) {
-        String query = "INSERT INTO users (first_name, last_name, email, password, user_type) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users (username, password, full_name, email, role) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, firstName);
-            pstmt.setString(2, lastName);
-            pstmt.setString(3, email);
-            pstmt.setString(4, password); // Hashing should be done here, left as an exercise
+            pstmt.setString(1, email); // Assuming the username is the email
+            pstmt.setString(2, password); // No hashing for this example
+            pstmt.setString(3, firstName + " " + lastName); // Concatenate first and last name for full_name
+            pstmt.setString(4, email);
             pstmt.setString(5, userType);
 
             int affectedRows = pstmt.executeUpdate();
@@ -182,6 +182,7 @@ public class Newaccount extends JFrame implements ActionListener {
             ex.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel
