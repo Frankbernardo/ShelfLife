@@ -31,7 +31,6 @@ public class Loginpage extends Application {
     	invData = new InvData();
     	
     	
-    	
         primaryStage.setTitle("Welcome to Shelf Life");
 
         GridPane grid = new GridPane();
