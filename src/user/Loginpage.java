@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import product.ProductPage;
 
 // SQL Imports
 import java.sql.Connection;
@@ -79,11 +80,15 @@ public class Loginpage extends Application {
             String password = txtPassword.getText();
             if (invData.checkUserCredentials(email, password)) {
                 actiontarget.setText("Login successful!");
-                // Proceed to the next screen or perform other actions
+
+                // Switch to the ProductPage scene
+                ProductPage productPage = new ProductPage();
+                productPage.start(primaryStage);
             } else {
                 actiontarget.setText("Invalid email or password.");
             }
         });
+
 
         btnCreateAccount.setOnAction(e -> {
             // Open the account creation interface

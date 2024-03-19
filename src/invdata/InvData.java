@@ -34,29 +34,21 @@ public class InvData {
 
     public boolean checkUserCredentials(String email, String password) {
         try {
-            String sql = "SELECT password_hash FROM users WHERE email = ?";
+            String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, email);
+            pstmt.setString(2, password);
 
             ResultSet rs = pstmt.executeQuery();
-
             if (rs.next()) {
-                String storedHash = rs.getString("password_hash");
-                String inputHash = HashingUtil.hashPassword(password);
-
-                System.out.println("Stored Hash: " + storedHash);
-                System.out.println("Input Hash: " + inputHash);
-
-                if (storedHash.equals(inputHash)) {
-                    return true; // Passwords match
-                }
+                return true; // User found and password matches
             }
             rs.close();
             pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Email not found or passwords don't match
+        return false; // User not found or password does not match
     }
 }
 
