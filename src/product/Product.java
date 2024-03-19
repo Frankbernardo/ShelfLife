@@ -12,7 +12,6 @@ public class Product {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.category = category;
     }
 
     // Getters
@@ -23,7 +22,7 @@ public class Product {
     public String getName() {
         return name;
     }
-
+	
     public double getPrice() {
         return price;
     }
@@ -31,10 +30,12 @@ public class Product {
     public int getQuantity() {
         return quantity;
     }
+    
+	public String getCategory() {
+		return category;
+	}
 
-    public String getCategory() {
-        return category;
-    }
+
 
     // Setters
     public void setId(int id) {
@@ -48,13 +49,12 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     @Override
@@ -67,4 +67,5 @@ public class Product {
                 ", category='" + category + '\'' +
                 '}';
     }
+    
 }
