@@ -1,18 +1,22 @@
 package product;
+import java.util.Optional;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import user.Loginpage;
 
 public class ProductPage extends Application {
 
+    private ObservableList<Product> products = FXCollections.observableArrayList();
+
     @Override
     public void start(Stage primaryStage) {
-        // Left side menu
         VBox leftMenu = new VBox();
         leftMenu.setPadding(new Insets(10));
         leftMenu.setSpacing(8);
@@ -21,32 +25,15 @@ public class ProductPage extends Application {
         Label shelfLifeLabel = new Label("Shelf life");
         shelfLifeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 24px;");
 
-        Button loginButton = new Button("Log In");
-        loginButton.setOnAction(e -> {
-            // Switch to the login screen
-            Loginpage loginScreen = new Loginpage();
-            loginScreen.start(primaryStage);
-        });
-       /* Button loginButton = new Button("Log In");
-        loginButton.setMaxWidth(Double.MAX_VALUE);
-        loginButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
-        // Event handler for Log In button
-        loginButton.setOnAction(event -> System.out.println("Log In clicked!"));
-        */
-        
-        // Menu items
+        // Example menu items
         Button reportsButton = new Button("Reports");
-        reportsButton.setOnAction(event -> System.out.println("Reports clicked!"));
         Button inventoryButton = new Button("Inventory");
-        inventoryButton.setOnAction(event -> System.out.println("Inventory clicked!"));
         Button poListButton = new Button("Purchase Order List");
-        poListButton.setOnAction(event -> System.out.println("Purchase Order List clicked!"));
         Button poFormButton = new Button("Purchase Order Form");
-        poFormButton.setOnAction(event -> System.out.println("Purchase Order Form clicked!"));
+        Button loginButton = new Button("Log In");
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, loginButton, reportsButton, inventoryButton, poListButton, poFormButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, reportsButton, inventoryButton, poListButton, poFormButton, loginButton);
 
-        // Product list section on the right
         VBox productListSection = new VBox();
         productListSection.setPadding(new Insets(10));
         productListSection.setSpacing(8);
@@ -57,40 +44,13 @@ public class ProductPage extends Application {
 
         Button addButton = new Button("Add Product");
         addButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
-        // Event handler for Add Product button
-        addButton.setOnAction(event -> System.out.println("Add Product clicked!"));
+        addButton.setOnAction(event -> showAddProductDialog());
 
-        // Search field and button
-        HBox searchBox = new HBox(5);
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search for items...");
-        Button searchButton = new Button("Search");
-        searchButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
-        // Event handler for Search button
-        searchButton.setOnAction(event -> System.out.println("Search clicked with query: " + searchField.getText()));
+        productListSection.getChildren().addAll(productListLabel, addButton, setupProductTable());
 
-        searchBox.getChildren().addAll(searchField, searchButton);
-
-        // Table for displaying products
-        TableView<Product> productTable = new TableView<>();
-        productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        TableColumn<Product, String> upcColumn = new TableColumn<>("UPC");
-        TableColumn<Product, String> itemNameColumn = new TableColumn<>("Item Name");
-        TableColumn<Product, String> descriptionColumn = new TableColumn<>("Description");
-        TableColumn<Product, String> categoryColumn = new TableColumn<>("Category");
-        TableColumn<Product, Double> costColumn = new TableColumn<>("Cost");
-        TableColumn<Product, Integer> quantityLeftColumn = new TableColumn<>("Quantity Left");
-
-        productTable.getColumns().addAll(upcColumn, itemNameColumn, descriptionColumn, categoryColumn, costColumn, quantityLeftColumn);
-
-        productListSection.getChildren().addAll(productListLabel, addButton, searchBox, productTable);
-
-        // Root layout
         HBox root = new HBox(10);
         root.getChildren().addAll(leftMenu, productListSection);
 
-        // Create scene
         Scene scene = new Scene(root, 960, 540);
 
         primaryStage.setTitle("Inventory Management System");
@@ -98,8 +58,100 @@ public class ProductPage extends Application {
         primaryStage.show();
     }
 
+    private TableView<Product> setupProductTable() {
+        TableView<Product> table = new TableView<>();
+        table.setItems(products);
+
+        TableColumn<Product, String> upcColumn = new TableColumn<>("UPC");
+        upcColumn.setCellValueFactory(new PropertyValueFactory<>("upc"));
+
+        TableColumn<Product, String> nameColumn = new TableColumn<>("Item Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+
+        TableColumn<Product, String> descriptionColumn = new TableColumn<>("Description");
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        TableColumn<Product, String> categoryColumn = new TableColumn<>("Category");
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+
+        TableColumn<Product, Double> costColumn = new TableColumn<>("Cost");
+        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
+
+        TableColumn<Product, Integer> quantityColumn = new TableColumn<>("Quantity Left");
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantityLeft"));
+
+        table.getColumns().addAll(upcColumn, nameColumn, descriptionColumn, categoryColumn, costColumn, quantityColumn);
+
+        return table;
+    }
+
+    private void showAddProductDialog() {
+        Dialog<Product> dialog = new Dialog<>();
+        dialog.setTitle("Add Product");
+        dialog.setHeaderText("Enter product details");
+
+        ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButton, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField upcField = new TextField();
+        upcField.setPromptText("UPC");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Item Name");
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("Description");
+        TextField categoryField = new TextField();
+        categoryField.setPromptText("Category");
+        TextField costField = new TextField();
+        costField.setPromptText("Cost");
+        TextField quantityField = new TextField();
+        quantityField.setPromptText("Quantity Left");
+
+        grid.add(new Label("UPC:"), 0, 0);
+        grid.add(upcField, 1, 0);
+        grid.add(new Label("Item Name:"), 0, 1);
+        grid.add(nameField, 1, 1);
+        grid.add(new Label("Description:"), 0, 2);
+        grid.add(descriptionField, 1, 2);
+        grid.add(new Label("Category:"), 0, 3);
+        grid.add(categoryField, 1, 3);
+        grid.add(new Label("Cost:"), 0, 4);
+        grid.add(costField, 1, 4);
+        grid.add(new Label("Quantity Left:"), 0, 5);
+        grid.add(quantityField, 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == addButton) {
+                try {
+                    return new Product(
+                        upcField.getText(),
+                        nameField.getText(),
+                        descriptionField.getText(),
+                        categoryField.getText(),
+                        Double.parseDouble(costField.getText()),
+                        Integer.parseInt(quantityField.getText())
+                    );
+                } catch (NumberFormatException e) {
+                    // Log error or inform user
+                    System.out.println("Error: Invalid number format.");
+                    return null;
+                }
+            }
+            return null;
+        });
+
+        Optional<Product> result = dialog.showAndWait();
+
+        result.ifPresent(product -> products.add(product));
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
-
 }

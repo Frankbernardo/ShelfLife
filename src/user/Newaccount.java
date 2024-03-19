@@ -1,6 +1,9 @@
 package user;
 
 import javax.swing.*;
+
+import javafx.stage.Stage;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -189,6 +192,5 @@ public class Newaccount extends JFrame implements ActionListener {
         }
         new Newaccount();
     }
-    
 }
 
