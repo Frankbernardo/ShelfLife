@@ -90,13 +90,15 @@ public class Loginpage extends Application {
 
 
         btnCreateAccount.setOnAction(e -> {
-            // Switch to the Newaccount scene
-            Newaccount newAccount = new Newaccount();
-            newAccount.setVisible(true);
-            
-            // Optionally, hide the login window
-            primaryStage.hide();
+            // Close the current login stage
+            Stage loginStage = (Stage) btnCreateAccount.getScene().getWindow();
+            loginStage.close();
+
+            // Open the Newaccount stage
+            Stage newAccountStage = new Stage();
+            new Newaccount().start(newAccountStage);
         });
+
 
 
         forgotPasswordLink.setOnAction(e -> {
