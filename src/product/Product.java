@@ -1,69 +1,78 @@
 package product;
 
-public class Product{
-	private String upc;
-	private String itemName;
-	private String description;
-	private String category;
-	private double cost;
-	private int quantityLeft;
+public class Product {
+    private int productId;
+    private String name;
+    private double price;
+    private int categoryId;
+    private String description;
+    private String SKU;
+    private int quantity;
 
-    public Product(String upc, String itemName, String description, String category, double cost, int quantityLeft) {
-    	this.upc = upc;
-        this.itemName = itemName;
+    public Product(int productId, String name, double price, int categoryId, String description, String SKU, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.price = price;
+        this.categoryId = categoryId;
         this.description = description;
-        this.category = category;
-        this.cost = cost;
-        this.quantityLeft = quantityLeft;
+        this.SKU = SKU;
+        this.quantity = quantity;
     }
 
-	public String getUpc() {
-		return upc;
-	}
+    public int getProductId() {
+        return productId;
+    }
 
-	public void setUpc(String upc) {
-		this.upc = upc;
-	}
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
 
-	public String getItemName() {
-		return itemName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public double getPrice() {
+        return price;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-	public String getCategory() {
-		return category;
-	}
+    public int getCategoryId() {
+        return categoryId;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public double getCost() {
-		return cost;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setCost(double cost) {
-		this.cost = cost;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public int getQuantityLeft() {
-		return quantityLeft;
-	}
+    public String getSKU() {
+        return SKU;
+    }
 
-	public void setQuantityLeft(int quantityLeft) {
-		this.quantityLeft = quantityLeft;
-	}
-    
-    
+    public void setSKU(String SKU) {
+        this.SKU = SKU;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
+
