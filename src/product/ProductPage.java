@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import user.Loginpage;
 
 public class ProductPage extends Application {
 
@@ -30,9 +31,15 @@ public class ProductPage extends Application {
         Button inventoryButton = new Button("Inventory");
         Button poListButton = new Button("Purchase Order List");
         Button poFormButton = new Button("Purchase Order Form");
-        Button loginButton = new Button("Log In");
+        Button logoutButton = new Button("Log Out");
+        logoutButton.setOnAction(e -> {
+            // Switch to the login screen
+            Loginpage loginScreen = new Loginpage();
+            loginScreen.start(primaryStage);
+        });
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, reportsButton, inventoryButton, poListButton, poFormButton, loginButton);
+
+        leftMenu.getChildren().addAll(shelfLifeLabel, reportsButton, inventoryButton, poListButton, poFormButton, logoutButton);
 
         VBox productListSection = new VBox();
         productListSection.setPadding(new Insets(10));
