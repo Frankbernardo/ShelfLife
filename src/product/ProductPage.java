@@ -51,10 +51,16 @@ public class ProductPage extends Application {
 
         Button logoutButton = new Button("Log Out");
         logoutButton.setOnAction(e -> {
+            // Close the current stage
+            Stage currentStage = (Stage) logoutButton.getScene().getWindow();
+            currentStage.close();
+
+            // Open the sign-in page in a new stage
             Loginpage loginScreen = new Loginpage();
-            loginScreen.start(new Stage());
-            primaryStage.close();
+            Stage loginStage = new Stage();
+            loginScreen.start(loginStage);
         });
+
 
 
 
