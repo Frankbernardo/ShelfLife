@@ -1,4 +1,5 @@
 package user;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -74,7 +75,7 @@ public class Newaccount extends Application {
 
         Button btn = new Button("Sign up");
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.setAlignment(Pos.BOTTOM_CENTER);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 6);
 
