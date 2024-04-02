@@ -91,11 +91,11 @@ public class Loginpage extends Application {
 
 
         btnCreateAccount.setOnAction(e -> {
-            // Close the current login stage
+           
             Stage loginStage = (Stage) btnCreateAccount.getScene().getWindow();
             loginStage.close();
 
-            // Open the Newaccount stage
+           
             Stage newAccountStage = new Stage();
             new Newaccount().start(newAccountStage);
         });
@@ -103,7 +103,7 @@ public class Loginpage extends Application {
 
 
         forgotPasswordLink.setOnAction(e -> {
-            // Forgot password logic goes here
+           
         });
 
         Scene scene = new Scene(grid, 300, 275);

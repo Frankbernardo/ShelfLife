@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class InvData {
-    // Define the database connection details
     private static final String DB_URL = "jdbc:mysql://localhost:3306/InventoryDB";
     private static final String USER = "root";
     private static final String PASS = "Misa70656";
@@ -41,14 +40,14 @@ public class InvData {
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return true; // User found and password matches
+                return true; 
             }
             rs.close();
             pstmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // User not found or password does not match
+        return false; 
     }
 }
 

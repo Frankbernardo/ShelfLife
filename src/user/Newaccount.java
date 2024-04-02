@@ -114,9 +114,9 @@ public class Newaccount extends Application {
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, email); // Assuming the username is the email
-            pstmt.setString(2, password); // No hashing for this example
-            pstmt.setString(3, firstName + " " + lastName); // Concatenate first and last name for full_name
+            pstmt.setString(1, email); 
+            pstmt.setString(2, password); 
+            pstmt.setString(3, firstName + " " + lastName); 
             pstmt.setString(4, email);
             pstmt.setString(5, userType);
 

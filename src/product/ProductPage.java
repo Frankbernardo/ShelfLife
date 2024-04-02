@@ -29,12 +29,12 @@ public class ProductPage extends Application {
     @Override
     public void start(Stage primaryStage) {
         VBox leftMenu = createLeftMenu(primaryStage);
-        // Rest of your code...
+       
     
 
         loadProductsFromDatabase();
 
-        // Your existing UI setup code...
+        
 
         primaryStage.setTitle("Inventory Management System");
         primaryStage.setScene(new Scene(createMainLayout(), 960, 540));
@@ -52,11 +52,11 @@ public class ProductPage extends Application {
 
         Button logoutButton = new Button("Log Out");
         logoutButton.setOnAction(e -> {
-            // Close the current stage
+            
             Stage currentStage = (Stage) logoutButton.getScene().getWindow();
             currentStage.close();
 
-            // Open the sign-in page in a new stage
+           
             Loginpage loginScreen = new Loginpage();
             Stage loginStage = new Stage();
             loginScreen.start(loginStage);
@@ -65,11 +65,11 @@ public class ProductPage extends Application {
 
         Button PurchaseOrderFormButton = new Button("Purchase Order Form");
         PurchaseOrderFormButton.setOnAction(e -> {
-            // Close the current stage
+           
             Stage currentStage = (Stage) PurchaseOrderFormButton.getScene().getWindow();
             currentStage.close();
             
-            // Open the Order Form page in a new stage
+           
             orderlistpage  orderlistScreen = new orderlistpage();
             Stage orderlistStage = new Stage();
             orderlistScreen.start(orderlistStage);
@@ -166,16 +166,16 @@ public class ProductPage extends Application {
             if (dialogButton == addButton) {
                 try {
                     return new Product(
-                        0, // Assuming product_id is auto-incremented in the database
+                        0, 
                         nameField.getText(),
                         Double.parseDouble(priceField.getText()),
-                        0, // Assuming category_id will be set later or is not needed for this dialog
+                        0, 
                         descriptionField.getText(),
                         SKUField.getText(),
                         Integer.parseInt(quantityField.getText())
                     );
                 } catch (NumberFormatException e) {
-                    // Log error or inform user
+                   
                     System.out.println("Error: Invalid number format.");
                     return null;
                 }
@@ -196,7 +196,7 @@ public class ProductPage extends Application {
         String inventoryQuery = "INSERT INTO inventory (product_id, quantity) VALUES (?, ?)";
 
         try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword)) {
-            // Insert into the products table
+            
             try (PreparedStatement pstmt = conn.prepareStatement(productQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 pstmt.setString(1, product.getName());
                 pstmt.setDouble(2, product.getPrice());
@@ -204,12 +204,12 @@ public class ProductPage extends Application {
                 pstmt.setString(4, product.getSKU());
                 pstmt.executeUpdate();
 
-                // Get the generated product_id
+                
                 ResultSet generatedKeys = pstmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int productId = generatedKeys.getInt(1);
 
-                    // Insert into the inventory table
+                   
                     try (PreparedStatement pstmtInventory = conn.prepareStatement(inventoryQuery)) {
                         pstmtInventory.setInt(1, productId);
                         pstmtInventory.setInt(2, product.getQuantity());
@@ -235,10 +235,10 @@ public class ProductPage extends Application {
                     rs.getInt("product_id"),
                     rs.getString("name"),
                     rs.getDouble("price"),
-                    0, // Assuming category_id is not needed for display
+                    0, 
                     rs.getString("description"),
                     rs.getString("SKU"),
-                    rs.getInt("quantity") // Retrieve quantity from the result set
+                    rs.getInt("quantity") 
                 ));
             }
         } catch (SQLException ex) {
