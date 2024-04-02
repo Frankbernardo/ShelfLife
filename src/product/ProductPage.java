@@ -245,6 +245,7 @@ public class ProductPage extends Application {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            
         }
     }
 
