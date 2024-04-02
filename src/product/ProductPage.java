@@ -194,21 +194,41 @@ public class ProductPage extends Application {
     }
 
     private void addProductToDatabase(Product product) {
-        String query = "INSERT INTO products (name, price, description, SKU) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, product.getName());
-            pstmt.setDouble(2, product.getPrice());
-            pstmt.setString(3, product.getDescription());
-            pstmt.setString(4, product.getSKU());
-            pstmt.executeUpdate();
+        String productQuery = "INSERT INTO products (name, price, description, SKU) VALUES (?, ?, ?, ?)";
+        String inventoryQuery = "INSERT INTO inventory (product_id, quantity) VALUES (?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword)) {
+            // Insert into the products table
+            try (PreparedStatement pstmt = conn.prepareStatement(productQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                pstmt.setString(1, product.getName());
+                pstmt.setDouble(2, product.getPrice());
+                pstmt.setString(3, product.getDescription());
+                pstmt.setString(4, product.getSKU());
+                pstmt.executeUpdate();
+
+                // Get the generated product_id
+                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int productId = generatedKeys.getInt(1);
+
+                    // Insert into the inventory table
+                    try (PreparedStatement pstmtInventory = conn.prepareStatement(inventoryQuery)) {
+                        pstmtInventory.setInt(1, productId);
+                        pstmtInventory.setInt(2, product.getQuantity());
+                        pstmtInventory.executeUpdate();
+                    }
+                }
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+
     private void loadProductsFromDatabase() {
-        String query = "SELECT product_id, name, price, description, SKU FROM products";
+        String query = "SELECT p.product_id, p.name, p.price, p.description, p.SKU, i.quantity " +
+                       "FROM products p " +
+                       "JOIN inventory i ON p.product_id = i.product_id";
         try (Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
@@ -220,7 +240,7 @@ public class ProductPage extends Application {
                     0, // Assuming category_id is not needed for display
                     rs.getString("description"),
                     rs.getString("SKU"),
-                    0  // Assuming quantity is handled separately
+                    rs.getInt("quantity") // Retrieve quantity from the result set
                 ));
             }
         } catch (SQLException ex) {
