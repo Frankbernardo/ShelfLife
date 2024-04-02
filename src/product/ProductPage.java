@@ -63,22 +63,20 @@ public class ProductPage extends Application {
         });
 
 
-        Button PurchaseOrderListButton = new Button("Purchase Order List");
-        PurchaseOrderListButton.setOnAction(e -> {
-            /* Close the current stage
-            Stage currentStage = (Stage) PurchaseOrderListButton.getScene().getWindow();
+        Button PurchaseOrderFormButton = new Button("Purchase Order Form");
+        PurchaseOrderFormButton.setOnAction(e -> {
+            // Close the current stage
+            Stage currentStage = (Stage) PurchaseOrderFormButton.getScene().getWindow();
             currentStage.close();
             
-            */
-
-            // Open the sign-in page in a new stage
+            // Open the Order Form page in a new stage
             orderlistpage  orderlistScreen = new orderlistpage();
             Stage orderlistStage = new Stage();
             orderlistScreen.start(orderlistStage);
         });
 
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), new Button("Inventory"), PurchaseOrderListButton, new Button("Purchase Order Form"), logoutButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), new Button("Inventory"), new Button("Purchase Order List"),PurchaseOrderFormButton, logoutButton);
         return leftMenu;
     }
 
