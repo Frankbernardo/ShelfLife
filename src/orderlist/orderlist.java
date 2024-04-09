@@ -5,10 +5,10 @@ public class orderlist {
 	 private String SKU;
 	 private double price;
 	 private int inventory;
-	 private int input;
+	 private String input;
 	 
 	
-	 public orderlist (String item, String SKU, double price, int inventory, int input) {
+	 public orderlist (String item, String SKU, double price, int inventory, String input) {
 		 this.item = item;
 		 this.SKU = SKU;
 		 this.price = price;
@@ -57,14 +57,16 @@ public class orderlist {
 	}
 
 
-	public int getInput() {
+	public String getInput() {
 		return input;
 	}
 
 
-	public void setInput(int input) {
+	public void setInput(String string) {
 		this.input = input;
 	}
+	
+
 	 
 	 
 }
