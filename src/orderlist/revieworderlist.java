@@ -1,11 +1,14 @@
 package orderlist;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -14,16 +17,17 @@ import javafx.stage.Stage;
 import product.ProductPage;
 
 public class revieworderlist extends Application {
-    
+	
+	private ObservableList<orderlist> orderItems = FXCollections.observableArrayList();
+    private TableView<orderlist> tableView = new TableView<>();
+    private String url = "jdbc:mysql://localhost:3306/InventoryDB";
+    private String dbUser = "root";
+    private String dbPassword = "Misa70656";
+
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Riview Page");
-
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        tableView.setItems(orderItems);
+        tableView.setEditable(true);
         
         TableColumn<orderlist, String> itemColumn = new TableColumn<>("Item");
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("item"));
@@ -34,12 +38,8 @@ public class revieworderlist extends Application {
         TableColumn<orderlist, String> inputColumn = new TableColumn<>("Input");
         inputColumn.setCellValueFactory(new PropertyValueFactory<>("input"));
         
-        Label totalLabel = new Label("Total:");
-        grid.add(totalLabel, 0, 2);
-        
-        TextField totalTextField = new TextField();
-        totalTextField.setEditable(false);
-        grid.add(totalTextField, 1, 2);
+        TableColumn<orderlist, String> totalAmoutnColumn = new TableColumn<>("Total Amount");
+        totalAmoutnColumn.setCellValueFactory(new PropertyValueFactory<>("Toatl Amount"));
 
         Button btnGoBack = new Button("Go Back");
         btnGoBack.setOnAction(event -> {
@@ -50,7 +50,7 @@ public class revieworderlist extends Application {
             Stage orderlistStage = new Stage();
             orderlistScreen.start(orderlistStage);
     	
-    });
+        });
         
         Button btnSubmit = new Button("Submit");
         	btnSubmit.setOnAction(event -> {
@@ -62,15 +62,6 @@ public class revieworderlist extends Application {
         	
         });
 
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(btnGoBack);
-        hbBtn.getChildren().add(btnSubmit);
-        grid.add(hbBtn, 1, 4);
-
-        Scene scene = new Scene(grid, 300, 275);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
     
     public static void main(String[] args) {
