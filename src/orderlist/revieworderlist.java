@@ -26,7 +26,7 @@ import javafx.scene.layout.BorderPane;
 	    private TableView<orderlist> tableView = new TableView<>();
 	    private String url = "jdbc:mysql://localhost:3306/InventoryDB";
 	    private String dbUser = "root";
-	    private String dbPassword = "password"; // Changed for security reasons
+	    private String dbPassword = "Misa70656";
 
 	    @Override
 	    public void start(Stage primaryStage) {
@@ -94,7 +94,11 @@ import javafx.scene.layout.BorderPane;
 	             PreparedStatement pstmt = conn.prepareStatement(query)) {
 	            ResultSet rs = pstmt.executeQuery();
 	            while (rs.next()) {
-	                orderItems.add(new orderlist(query, query, 0, 0, query));
+	                orderItems.add(new orderlist(
+	                    rs.getString("name"),
+	                    query, rs.getDouble("price"),
+	                    0, "0"
+	                ));
 	            }
 	        } catch (SQLException ex) {
 	            ex.printStackTrace();
