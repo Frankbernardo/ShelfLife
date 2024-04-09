@@ -112,14 +112,22 @@ public class orderlistpage extends Application {
         });
 
         Button reviewButton = new Button("Review");
-        reviewButton.setOnAction(event -> {
+        reviewButton.setOnAction(e -> {
+        Stage currentStage = (Stage) reviewButton.getScene().getWindow();
+        currentStage.close();
+        
+       
+        revieworderlist  revieworderlistScreen = new revieworderlist();
+        revieworderlistScreen.start(new Stage());
+
+    });
+   /*     reviewButton.setOnAction(event -> {
             double total = calculateTotal();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Order Review");
             alert.setHeaderText("Total Price");
             alert.setContentText("The total price of your order is: $" + String.format("%.2f", total));
-            alert.showAndWait();
-        });
+            alert.showAndWait();   */
 
 
         HBox buttonBar = new HBox(10, backButton, reviewButton);

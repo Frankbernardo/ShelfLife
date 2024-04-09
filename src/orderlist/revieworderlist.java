@@ -66,15 +66,29 @@ import javafx.scene.layout.BorderPane;
 
 	        tableView.getColumns().addAll(itemColumn, priceColumn, inputColumn, totalColumn);
 
-	        Button backButton = new Button("Back");
-	        backButton.setOnAction(event -> primaryStage.close());
+	        Button btnGoBack = new Button("Go Back");
+	        btnGoBack.setOnAction(event -> {
+	            Stage currentStage = (Stage) btnGoBack.getScene().getWindow();
+	            currentStage.close();
+	            
+	            orderlistpage  orderlistScreen = new orderlistpage();
+	            Stage orderlistStage = new Stage();
+	            orderlistScreen.start(orderlistStage);
+	    	
+	        });
+	        
+	        Button btnSubmit = new Button("Submit");
+	        	btnSubmit.setOnAction(event -> {
+	                Stage currentStage = (Stage) btnSubmit.getScene().getWindow();
+	                currentStage.close();
 
-	        Button submitButton = new Button("Submit");
-	        submitButton.setOnAction(event -> {
-	            // Implement submit action
+	                ProductPage productPage = new ProductPage();
+	                productPage.start(new Stage());
+	        	
 	        });
 
-	        HBox buttonBar = new HBox(10, backButton, submitButton);
+
+	        HBox buttonBar = new HBox(10, btnGoBack, btnSubmit);
 	        buttonBar.setPadding(new Insets(15));
 	        buttonBar.setStyle("-fx-alignment: center;");
 
