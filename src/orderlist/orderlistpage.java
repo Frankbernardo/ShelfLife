@@ -7,10 +7,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
 import product.ProductPage;
 
 import java.sql.Connection;
@@ -47,58 +47,12 @@ public class orderlistpage extends Application {
 
         TableColumn<orderlist, String> inputColumn = new TableColumn<>("Input");
         inputColumn.setCellValueFactory(new PropertyValueFactory<>("input"));
-        inputColumn.setCellFactory(column -> new TableCell<orderlist, String>() {
-            private final TextField textField = new TextField();
-
-            {
-                textField.setOnAction(evt -> commitEdit(textField.getText()));
-                textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-                    if (!isNowFocused) {
-                        commitEdit(textField.getText());
-                    }
-                });
-                setGraphic(textField);
-
-                textField.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 1 && !isEmpty()) {
-                        startEdit();
-                    }
-                });
-            }
-
-            @Override
-            public void startEdit() {
-                super.startEdit();
-                textField.setText(getItem());
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                textField.requestFocus();
-            }
-
-            @Override
-            public void cancelEdit() {
-                super.cancelEdit();
-                setText(getItem());
-                setContentDisplay(ContentDisplay.TEXT_ONLY);
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    if (isEditing()) {
-                        textField.setText(item);
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    } else {
-                        setText(item);
-                        setContentDisplay(ContentDisplay.TEXT_ONLY);
-                    }
-                }
-            }
+        inputColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        inputColumn.setOnEditCommit(event -> {
+            orderlist item = event.getRowValue();
+            item.setInput(event.getNewValue());
+            System.out.println("Item: " + item.getItem() + ", Input: " + item.getInput());  // Logging input set
         });
-
 
         tableView.getColumns().addAll(itemColumn, SKUColumn, priceColumn, inventoryColumn, inputColumn);
 
@@ -113,22 +67,18 @@ public class orderlistpage extends Application {
 
         Button reviewButton = new Button("Review");
         reviewButton.setOnAction(e -> {
-        Stage currentStage = (Stage) reviewButton.getScene().getWindow();
-        currentStage.close();
-        
-       
-        revieworderlist  revieworderlistScreen = new revieworderlist();
-        revieworderlistScreen.start(new Stage());
+            ObservableList<orderlist> currentItems = FXCollections.observableArrayList(tableView.getItems());
+            for (orderlist item : currentItems) {
+                System.out.println("Passing Item: " + item.getItem() + ", Input: " + item.getInput());  // Confirm what's being passed
+            }
 
-    });
-   /*     reviewButton.setOnAction(event -> {
-            double total = calculateTotal();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Order Review");
-            alert.setHeaderText("Total Price");
-            alert.setContentText("The total price of your order is: $" + String.format("%.2f", total));
-            alert.showAndWait();   */
+            revieworderlist reviewPage = new revieworderlist(currentItems);
+            Stage reviewStage = new Stage();
+            reviewPage.start(reviewStage);
 
+            Stage currentStage = (Stage) reviewButton.getScene().getWindow();
+            currentStage.close();
+        });
 
         HBox buttonBar = new HBox(10, backButton, reviewButton);
         buttonBar.setStyle("-fx-alignment: center; -fx-padding: 10px;");
@@ -150,34 +100,19 @@ public class orderlistpage extends Application {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 orderItems.add(new orderlist(
-                    rs.getString("name"),
-                    rs.getString("SKU"),
-                    rs.getDouble("price"),
-                    rs.getInt("quantity"),
-                    "0"
-                ));
+                        rs.getString("name"),
+                        rs.getString("SKU"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        "0"  
+                    ));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private double calculateTotal() {
-        double total = 0;
-        for (orderlist item : orderItems) {
-            try {
-                int quantity = Integer.parseInt(item.getInput());
-                total += quantity * item.getPrice();
-            } catch (NumberFormatException e) {
-                // Handle invalid input
-            }
-        }
-        return total;
+    public static void main(String[] args) {
+        launch(args);
     }
-
-            public static void main(String[] args) {
-                launch(args);
-            }
-        }
-
-
+}
