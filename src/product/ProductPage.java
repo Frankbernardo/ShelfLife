@@ -75,8 +75,19 @@ public class ProductPage extends Application {
             orderlistScreen.start(orderlistStage);
         });
 
+        Button InventoryButton = new Button("Inventory");
+        InventoryButton.setOnAction(e -> {
+           
+            Stage currentStage = (Stage) InventoryButton.getScene().getWindow();
+            currentStage.close();
+            
+           
+            inventory  inventoryScreen = new inventory();
+            Stage iventoryStage = new Stage();
+            inventoryScreen.start(iventoryStage);
+        });
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), new Button("Inventory"), new Button("Purchase Order List"),PurchaseOrderFormButton, logoutButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), InventoryButton, new Button("Purchase Order List"),PurchaseOrderFormButton, logoutButton);
         return leftMenu;
     }
 
