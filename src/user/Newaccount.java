@@ -74,39 +74,51 @@ public class Newaccount extends Application {
         grid.add(userTypeBox, 1, 5);
 
         Button btn = new Button("Sign up");
+        btn.setOnAction(e -> {
+            insertUser(userTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), pwBox.getText(), rbAdmin.isSelected() ? "Admin" : "Regular");
+
+            // After insertion logic
+            Stage currentStage = (Stage) btn.getScene().getWindow();
+            currentStage.close();
+
+            Loginpage loginScreen = new Loginpage();
+            Stage loginStage = new Stage();
+            loginScreen.start(loginStage);
+        });
+
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_CENTER);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 6);
 
-        final Text actiontarget = new Text();
-        grid.add(actiontarget, 1, 7);
+        // Add a Back button
+        Button backBtn = new Button("Back");
+        backBtn.setOnAction(e -> {
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
 
-        btn.setOnAction(e -> {
-            String firstName = userTextField.getText();
-            String lastName = lastNameTextField.getText();
-            String email = emailTextField.getText();
-            String password = pwBox.getText();
-            String userType = rbAdmin.isSelected() ? "Admin" : "Regular";
-            insertUser(firstName, lastName, email, password, userType);
+            Loginpage loginScreen = new Loginpage();
+            Stage loginStage = new Stage();
+            loginScreen.start(loginStage);
         });
+        HBox hbBackBtn = new HBox(10);
+        hbBackBtn.setAlignment(Pos.BOTTOM_CENTER);
+        hbBackBtn.getChildren().add(backBtn);
+        grid.add(hbBackBtn, 0, 6);
 
         Scene scene = new Scene(grid, 800, 475);
         primaryStage.setScene(scene);
-
         primaryStage.show();
     }
 
     private Connection connect() {
-        Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url, dbUser, dbPassword);
-            System.out.println("Connected to the database successfully.");
+            return DriverManager.getConnection(url, dbUser, dbPassword);
         } catch (SQLException e) {
             System.out.println("Could not connect to the database.");
             e.printStackTrace();
+            return null;
         }
-        return conn;
     }
 
     private void insertUser(String firstName, String lastName, String email, String password, String userType) {
@@ -114,9 +126,9 @@ public class Newaccount extends Application {
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, email); 
-            pstmt.setString(2, password); 
-            pstmt.setString(3, firstName + " " + lastName); 
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            pstmt.setString(3, firstName + " " + lastName);
             pstmt.setString(4, email);
             pstmt.setString(5, userType);
 

@@ -62,7 +62,7 @@ public class orderlist {
 	}
 
 
-	public void setInput(String string) {
+	public void setInput(String input) {
 		this.input = input;
 	}
 	
