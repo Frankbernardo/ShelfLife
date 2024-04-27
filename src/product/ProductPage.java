@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import orderlist.PurchaseOrderList;
 import orderlist.orderlistpage;
 import user.Loginpage;
 
@@ -62,6 +63,17 @@ public class ProductPage extends Application {
             loginScreen.start(loginStage);
         });
 
+        Button PurchaseOrderListButton = new Button("Purchase Order List");
+        PurchaseOrderListButton.setOnAction(e -> {
+           
+            Stage currentStage = (Stage) PurchaseOrderListButton.getScene().getWindow();
+            currentStage.close();
+            
+           
+            PurchaseOrderList  PurchaseOrderListScreen = new PurchaseOrderList();
+            Stage PurchaseOrderListStage = new Stage();
+            PurchaseOrderListScreen.start(PurchaseOrderListStage);
+        });
 
         Button PurchaseOrderFormButton = new Button("Purchase Order Form");
         PurchaseOrderFormButton.setOnAction(e -> {
@@ -87,7 +99,7 @@ public class ProductPage extends Application {
             inventoryScreen.start(iventoryStage);
         });
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), InventoryButton, new Button("Purchase Order List"),PurchaseOrderFormButton, logoutButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), InventoryButton, PurchaseOrderListButton ,PurchaseOrderFormButton, logoutButton);
         return leftMenu;
     }
 
