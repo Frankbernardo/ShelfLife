@@ -54,7 +54,6 @@ public class inventory extends Application {
             productPage.start(new Stage());
         });
 
-        Button reportsButton = new Button("Reports");
         Button purchaseOrderListButton = new Button("Purchase Order List");
         Button PurchaseOrderFormButton = new Button("Purchase Order Form");
         PurchaseOrderFormButton.setOnAction(e -> {
@@ -80,7 +79,7 @@ public class inventory extends Application {
             loginScreen.start(loginStage);
         });
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, homeButton, reportsButton, purchaseOrderListButton, PurchaseOrderFormButton, logoutButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, homeButton, purchaseOrderListButton, PurchaseOrderFormButton, logoutButton);
         return leftMenu;
     }
 
