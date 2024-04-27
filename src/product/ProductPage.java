@@ -99,7 +99,7 @@ public class ProductPage extends Application {
             inventoryScreen.start(iventoryStage);
         });
 
-        leftMenu.getChildren().addAll(shelfLifeLabel, new Button("Reports"), InventoryButton, PurchaseOrderListButton ,PurchaseOrderFormButton, logoutButton);
+        leftMenu.getChildren().addAll(shelfLifeLabel, InventoryButton, PurchaseOrderListButton ,PurchaseOrderFormButton, logoutButton);
         return leftMenu;
     }
 

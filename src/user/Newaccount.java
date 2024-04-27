@@ -65,12 +65,8 @@ public class Newaccount extends Application {
         rbAdmin.setToggleGroup(group);
         rbAdmin.setSelected(true);
 
-        RadioButton rbRegular = new RadioButton("Regular user");
-        rbRegular.setToggleGroup(group);
-
         HBox userTypeBox = new HBox(20);
         userTypeBox.getChildren().add(rbAdmin);
-        userTypeBox.getChildren().add(rbRegular);
         grid.add(userTypeBox, 1, 5);
 
         Button btn = new Button("Sign up");
