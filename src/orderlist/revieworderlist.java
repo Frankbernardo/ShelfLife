@@ -11,6 +11,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import product.ProductPage;
 
 public class revieworderlist extends Application {
 private ObservableList<orderlist> orderItems;
@@ -70,6 +71,8 @@ public void start(Stage primaryStage) {
         primaryStage.close();
 
         System.out.println("Order submitted.");
+        ProductPage productPage = new ProductPage();
+        productPage.start(new Stage());
     });
 
     HBox buttonBar = new HBox(10, btnGoBack, btnSubmit);

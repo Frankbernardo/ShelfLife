@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import product.ProductPage;
 
 import java.time.LocalDate;
 
@@ -42,15 +43,14 @@ public class PurchaseOrderList extends Application {
 
         tableView.getColumns().addAll(orderNumberColumn, dateColumn, totalColumn, actionColumn);
 
-        Button submitButton = new Button("Submit");
-        submitButton.setOnAction(event -> {
-            // Process and submit all orders
-            orders.forEach(order -> System.out.println("Submitting order: " + order));
+        Button btnGoBack = new Button("Go Back");
+        btnGoBack.setOnAction(event -> {
             primaryStage.close();
-            System.out.println("All orders have been submitted.");
+            ProductPage productPage = new ProductPage();
+            productPage.start(new Stage());
         });
 
-        HBox buttonBar = new HBox(10, submitButton);
+        HBox buttonBar = new HBox(10, btnGoBack);
         buttonBar.setPadding(new Insets(15));
         buttonBar.setStyle("-fx-alignment: center;");
 
