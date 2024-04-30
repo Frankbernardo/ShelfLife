@@ -3,36 +3,25 @@ package orderlist;
 import java.time.LocalDate;
 
 public class PurchaseOrder {
-	private int orderNumber;
-    private LocalDate date;
-    private double totalPrice;
+	private final int orderNumber;
+    private final LocalDate date;
+    private final double totalPrice;
 
-    public PurchaseOrder() {
+    public PurchaseOrder(int orderNumber, LocalDate date, double totalPrice) {
+        this.orderNumber = orderNumber;
+        this.date = date;
+        this.totalPrice = totalPrice;
     }
 
     public int getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    // Getter and setter for date
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    // Getter and setter for totalPrice
     public double getTotalPrice() {
         return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }

@@ -6,16 +6,14 @@ public class orderlist {
 	 private double price;
 	 private int inventory;
 	 private String input;
-	 private double total;
 	 
 	
-	 public orderlist (String item, String SKU, double price, int inventory, String input, double total) {
+	 public orderlist (String item, String SKU, double price, int inventory, String input) {
 		 this.item = item;
 		 this.SKU = SKU;
 		 this.price = price;
 		 this.inventory = inventory;
 		 this.input = input;
-		 this.total = total;
 	 }
 
 
@@ -68,13 +66,7 @@ public class orderlist {
 		this.input = input;
 	}
 	
-	public double getTotal() {
-	    return total;
-	}
 
-	public void setTotal(double total) {
-	    this.total = total;
-	}
 	 
 	 
 }
