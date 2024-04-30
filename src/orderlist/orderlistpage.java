@@ -53,6 +53,21 @@ public class orderlistpage extends Application {
             item.setInput(event.getNewValue());
             System.out.println("Item: " + item.getItem() + ", Input: " + item.getInput());  // Logging input set
         });
+        
+        TableColumn<orderlist, Double> totalColumn = new TableColumn<>("Total");
+        totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        inputColumn.setOnEditCommit(event -> {
+            orderlist item = event.getRowValue();
+            item.setInput(event.getNewValue());
+            try {
+                double total = Double.parseDouble(item.getInput()) * item.getPrice();
+                item.setTotal(total);  // Assuming there is a setTotal method in orderlist class
+                System.out.println("Updated Total: " + total);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input for quantity");
+            }
+        });
 
         tableView.getColumns().addAll(itemColumn, SKUColumn, priceColumn, inventoryColumn, inputColumn);
 

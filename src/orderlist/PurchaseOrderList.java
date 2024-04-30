@@ -63,6 +63,17 @@ public class PurchaseOrderList extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    public void addOrder(ObservableList<orderlist> orderItems) {
+        for (orderlist item : orderItems) {
+            PurchaseOrder po = new PurchaseOrder(); 
+            po.setTotalPrice(item.getTotal()); 
+            po.setDate(LocalDate.now()); 
+            po.setOrderNumber(orders.size() + 1);  
+            orders.add(po);
+        }
+        tableView.refresh();
+    }
 
     private static class ActionCell extends TableCell<PurchaseOrder, Void> {
         private final Button actionButton = new Button("View");
@@ -70,7 +81,6 @@ public class PurchaseOrderList extends Application {
         public ActionCell() {
             actionButton.setOnAction(event -> {
                 PurchaseOrder order = getTableView().getItems().get(getIndex());
-                // You could open a new window or a dialog with the order details here
                 System.out.println("Viewing order: " + order);
             });
         }

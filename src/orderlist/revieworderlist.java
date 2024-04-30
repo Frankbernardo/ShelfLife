@@ -35,24 +35,16 @@ public void start(Stage primaryStage) {
     TableColumn<orderlist, String> inputColumn = new TableColumn<>("Input");
     inputColumn.setCellValueFactory(new PropertyValueFactory<>("input"));
 
-    TableColumn<orderlist, String> totalColumn = new TableColumn<>("Total");
+    TableColumn<orderlist, Double> totalColumn = new TableColumn<>("Total");
     totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
-    totalColumn.setCellFactory(column -> new TableCell<orderlist, String>() {
+    totalColumn.setCellFactory(column -> new TableCell<orderlist, Double>() {
         @Override
-        protected void updateItem(String item, boolean empty) {
+        protected void updateItem(Double item, boolean empty) {
             super.updateItem(item, empty);
-            if (empty || item == null) {
+            if (item == null || empty) {
                 setText(null);
             } else {
-                orderlist orderItem = getTableView().getItems().get(getIndex());
-                try {
-                    double total = orderItem.getPrice() * Double.parseDouble(orderItem.getInput());
-                    setText(String.format("%.2f", total));
-                    System.out.println("Review Total for " + orderItem.getItem() + ": " + total);  // Debugging total calculation
-                } catch (NumberFormatException e) {
-                    setText("Error");
-                    System.err.println("Error calculating total: " + e.getMessage());
-                }
+                setText(String.format("%.2f", item));
             }
         }
     });
@@ -68,6 +60,11 @@ public void start(Stage primaryStage) {
 
     Button btnSubmit = new Button("Submit");
     btnSubmit.setOnAction(event -> {
+        // Creating a new instance of PurchaseOrderList and passing order items
+        PurchaseOrderList purchaseOrderList = new PurchaseOrderList();
+        purchaseOrderList.start(new Stage());  // Start PurchaseOrderList stage
+        purchaseOrderList.addOrder(orderItems);  // Adding orders
+
         primaryStage.close();
 
         System.out.println("Order submitted.");
