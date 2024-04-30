@@ -66,6 +66,15 @@ public class orderlist {
 		this.input = input;
 	}
 	
+	
+    public double calculateTotal() {
+        try {
+            int inputQuantity = Integer.parseInt(input);
+            return inputQuantity * price;
+        } catch (NumberFormatException e) {
+            return 0;  
+        }
+    }
 
 	 
 	 

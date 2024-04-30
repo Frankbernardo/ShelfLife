@@ -12,81 +12,77 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import product.ProductPage;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 
 public class revieworderlist extends Application {
-private ObservableList<orderlist> orderItems;
-public revieworderlist(ObservableList<orderlist> orderItems) {
-    this.orderItems = FXCollections.observableArrayList(orderItems);  
-}
+    private ObservableList<orderlist> orderItems;
 
-private TableView<orderlist> tableView = new TableView<>();
+    public revieworderlist(ObservableList<orderlist> orderItems) {
+        this.orderItems = FXCollections.observableArrayList(orderItems);  
+    }
 
-@Override
-public void start(Stage primaryStage) {
-    tableView.setItems(orderItems);
-    tableView.setEditable(false);
+    private TableView<orderlist> tableView = new TableView<>();
 
-    TableColumn<orderlist, String> itemColumn = new TableColumn<>("Item");
-    itemColumn.setCellValueFactory(new PropertyValueFactory<>("item"));
+    @Override
+    public void start(Stage primaryStage) {
+        tableView.setItems(orderItems);
+        tableView.setEditable(false);
 
-    TableColumn<orderlist, Double> priceColumn = new TableColumn<>("Price");
-    priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        TableColumn<orderlist, String> itemColumn = new TableColumn<>("Item");
+        itemColumn.setCellValueFactory(new PropertyValueFactory<>("item"));
 
-    TableColumn<orderlist, String> inputColumn = new TableColumn<>("Input");
-    inputColumn.setCellValueFactory(new PropertyValueFactory<>("input"));
+        TableColumn<orderlist, Double> priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-    TableColumn<orderlist, String> totalColumn = new TableColumn<>("Total");
-    totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
-    totalColumn.setCellFactory(column -> new TableCell<orderlist, String>() {
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setText(null);
-            } else {
-                orderlist orderItem = getTableView().getItems().get(getIndex());
-                try {
-                    double total = orderItem.getPrice() * Double.parseDouble(orderItem.getInput());
-                    setText(String.format("%.2f", total));
-                    System.out.println("Review Total for " + orderItem.getItem() + ": " + total);  // Debugging total calculation
-                } catch (NumberFormatException e) {
-                    setText("Error");
-                    System.err.println("Error calculating total: " + e.getMessage());
+        TableColumn<orderlist, String> inputColumn = new TableColumn<>("Input");
+        inputColumn.setCellValueFactory(new PropertyValueFactory<>("input"));
+
+        TableColumn<orderlist, Double> totalColumn = new TableColumn<>("Total");
+        totalColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().calculateTotal()));
+        totalColumn.setCellFactory(column -> new TableCell<orderlist, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
                 }
             }
-        }
-    });
+        });
 
-    tableView.getColumns().addAll(itemColumn, priceColumn, inputColumn, totalColumn);
+        tableView.getColumns().addAll(itemColumn, priceColumn, inputColumn, totalColumn);
 
-    Button btnGoBack = new Button("Go Back");
-    btnGoBack.setOnAction(event -> {
-        primaryStage.close();
-        orderlistpage orderlistScreen = new orderlistpage();
-        orderlistScreen.start(new Stage());
-    });
+        Button btnGoBack = new Button("Go Back");
+        btnGoBack.setOnAction(event -> {
+            primaryStage.close();
+            orderlistpage orderlistScreen = new orderlistpage();
+            orderlistScreen.start(new Stage());
+        });
 
-    Button btnSubmit = new Button("Submit");
-    btnSubmit.setOnAction(event -> {
-        primaryStage.close();
+        Button btnSubmit = new Button("Submit");
+        btnSubmit.setOnAction(event -> {
+            primaryStage.close();
+            System.out.println("Order submitted.");
+            ProductPage productPage = new ProductPage();
+            productPage.start(new Stage());
+        });
 
-        System.out.println("Order submitted.");
-        ProductPage productPage = new ProductPage();
-        productPage.start(new Stage());
-    });
+        HBox buttonBar = new HBox(10, btnGoBack, btnSubmit);
+        buttonBar.setPadding(new Insets(15));
+        buttonBar.setStyle("-fx-alignment: center;");
 
-    HBox buttonBar = new HBox(10, btnGoBack, btnSubmit);
-    buttonBar.setPadding(new Insets(15));
-    buttonBar.setStyle("-fx-alignment: center;");
+        BorderPane root = new BorderPane();
+        root.setCenter(tableView);
+        root.setBottom(buttonBar);
 
-    BorderPane root = new BorderPane();
-    root.setCenter(tableView);
-    root.setBottom(buttonBar);
+        Scene scene = new Scene(root, 800, 600);
+        primaryStage.setTitle("Review Order List");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
-    Scene scene = new Scene(root, 800, 600);
-    primaryStage.setTitle("Review Order List");
-    primaryStage.setScene(scene);
-    primaryStage.show();
-}
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
