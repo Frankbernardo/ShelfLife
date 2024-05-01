@@ -1,5 +1,10 @@
 package orderlist;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,6 +67,7 @@ public class revieworderlist extends Application {
 
         Button btnSubmit = new Button("Submit");
         btnSubmit.setOnAction(event -> {
+        	submitOrder(tableView.getItems());
             primaryStage.close();
             System.out.println("Order submitted.");
             ProductPage productPage = new ProductPage();
@@ -81,6 +87,31 @@ public class revieworderlist extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    public void submitOrder(ObservableList<orderlist> orderItems) {
+        String url = "jdbc:mysql://localhost:3306/InventoryDB";// Update database name
+        String user = "root";
+        String password = "Misa70656";
+
+        String sql = "INSERT INTO orders (product_name, sku, quantity, unit_price, total_price, order_date) VALUES (?, ?, ?, ?, ?, NOW())";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (orderlist item : orderItems) {
+                pstmt.setString(1, item.getItem());
+                pstmt.setString(2, item.getSKU());
+                pstmt.setInt(3, Integer.parseInt(item.getInput()));
+                pstmt.setDouble(4, item.getPrice());
+                pstmt.setDouble(5, item.getPrice() * Integer.parseInt(item.getInput()));
+                pstmt.executeUpdate();
+            }
+            System.out.println("Order submitted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error submitting order: " + e.getMessage());
+        }
+    }
+
 
     public static void main(String[] args) {
         launch(args);
